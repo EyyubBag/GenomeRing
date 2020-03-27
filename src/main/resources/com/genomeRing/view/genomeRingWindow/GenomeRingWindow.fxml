@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane fx:id="BorderPane" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.genomeRing.view.genomeRingWindow.GenomeRingWindowController">
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="Load" />
+                        <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" text="Export " />
+                        <MenuItem fx:id="exportVisibleMenuItem" mnemonicParsing="false" text="Export visible area only" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit " />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="SuperGenome">
+                  <items>
+                        <MenuItem fx:id="optimizeMenuItem" mnemonicParsing="false" text="WIP Optimize Block Order " />
+                        <MenuItem mnemonicParsing="false" text="Order Blocks Manually" />
+                        <MenuItem fx:id="redoMenuItem" mnemonicParsing="false" text="Redo" />
+                    <MenuItem fx:id="undoMenuitem" mnemonicParsing="false" text="Undo" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Change Genome Names" />
+                     </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <CheckBox fx:id="showPathsCheckBox" mnemonicParsing="false" selected="true" text="Show Paths" />
+                  <CheckBox fx:id="showSegmentsCheckbox" mnemonicParsing="false" selected="true" text="Show Genome Segments" />
+                  <CheckBox fx:id="showRingDimensionsCheckBox" mnemonicParsing="false" selected="true" text="Show Ring Dimensions" />
+                  <CheckBox fx:id="showLegendCheck" mnemonicParsing="false" selected="true" text="Show Legend" />
+                  <CheckBox fx:id="showBlockLabelsCheck" mnemonicParsing="false" selected="true" text="Show Block Labels" />
+                  <CheckBox fx:id="scaleCheckBox" mnemonicParsing="false" selected="true" text="Show Scale" />
+                  <VBox fx:id="ringInfoVBOX" prefHeight="71.0" prefWidth="185.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Genome Width: " />
+                              <Label fx:id="genomeWidthLabel" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Block Gap: " />
+                              <Label fx:id="blockGapLabel" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Circle Spacing: " />
+                              <Label fx:id="circleSpacingLabel" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rotation: " />
+                              <Label fx:id="rotationLabel" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" top="2.0" />
+                     </padding>
+                  </VBox>
+               </items>
+            </ToolBar>
+         </children>
+      </VBox>
+   </top>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+               <items>
+                  <MenuButton fx:id="sortBlocksMenuButton" mnemonicParsing="false" text="Sort Blocks by: ">
+                    <items>
+                        <RadioMenuItem fx:id="restoreOrderMenuItem" mnemonicParsing="false" selected="true" text="Restore inital order">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="OptimizerToggleGroup" />
+                           </toggleGroup>
+                        </RadioMenuItem>
+                        <RadioMenuItem fx:id="nOfJumpsRadioItem" mnemonicParsing="false" text="Number of Jumps" toggleGroup="$OptimizerToggleGroup" />
+                        <RadioMenuItem fx:id="nOfBlocksRadioItem" mnemonicParsing="false" text="Number of Blocks skipped" toggleGroup="$OptimizerToggleGroup" />
+                        <RadioMenuItem fx:id="jumpLengthRadioItem" mnemonicParsing="false" text="Total Jump Length" toggleGroup="$OptimizerToggleGroup" />
+                        <RadioMenuItem fx:id="manualItem" disable="true" mnemonicParsing="false" text="Manual" toggleGroup="$OptimizerToggleGroup" />
+                    </items>
+                  </MenuButton>
+               </items>
+            </ToolBar>
+            <ListView fx:id="BlockListView" maxHeight="1.7976931348623157E308" prefHeight="811.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+   </left>
+   <right>
+      <VBox fx:id="legendVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets></VBox>
+   </right>
+   <bottom>
+      <Label fx:id="updateLabel" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
