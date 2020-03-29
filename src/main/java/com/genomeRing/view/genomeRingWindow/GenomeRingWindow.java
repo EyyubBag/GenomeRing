@@ -38,14 +38,14 @@ public class GenomeRingWindow extends BorderPane {
     private Group scrollContent = new Group();
     private Group zoomContent = new Group();
     private Group completeGroup = new Group();
+    private Group viewAndLegendGroup = new Group();
+
 
 
     public GenomeRingWindow(Stage stage) throws Exception {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-
-         URL url = this.getClass().getResource("GenomeRingWindow.fxml");
-        System.out.println(this.getClass().getResource("genomeRingWindow/GenomeRingWindow.fxml"));
+        URL url = this.getClass().getResource("GenomeRingWindow.fxml");
 
        if (url == null)
             throw new Exception("URL not found");
@@ -71,6 +71,7 @@ public class GenomeRingWindow extends BorderPane {
         completeGroup.getChildren().clear();
         scrollContent.getChildren().clear();
         canvasPane.getChildren().clear();
+        viewAndLegendGroup.getChildren().clear();
 
         genomeRingView.setupView(superGenome, ringDimensions, this);
 
@@ -84,7 +85,7 @@ public class GenomeRingWindow extends BorderPane {
     }
 
     /**
-     * Sets up zooming and rotating with the mouse wheel.
+     * Sets up zooming,rotating and panning with the mouse.
      * Most of the following code is taken from this StackOverflow question: https://stackoverflow.com/questions/16680295/javafx-correct-scaling?noredirect=1&lq=1
      * @param superGenome
      * @param ringDimensions
@@ -269,5 +270,13 @@ public class GenomeRingWindow extends BorderPane {
 
     public GenomeRingView getGenomeRingView() {
         return genomeRingView;
+    }
+
+    public Group getCompleteGroup() {
+        return completeGroup;
+    }
+
+    public Group getViewAndLegendGroup() {
+        return viewAndLegendGroup;
     }
 }

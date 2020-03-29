@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="BorderPane" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.genomeRing.view.genomeRingWindow.GenomeRingWindowController">
+<BorderPane fx:id="BorderPane" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.genomeRing.view.genomeRingWindow.GenomeRingWindowController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -30,23 +30,9 @@
                         <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" text="Export " />
-                        <MenuItem fx:id="exportVisibleMenuItem" mnemonicParsing="false" text="Export visible area only" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit " />
                   </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="SuperGenome">
-                  <items>
-                        <MenuItem fx:id="optimizeMenuItem" mnemonicParsing="false" text="WIP Optimize Block Order " />
-                        <MenuItem mnemonicParsing="false" text="Order Blocks Manually" />
-                        <MenuItem fx:id="redoMenuItem" mnemonicParsing="false" text="Redo" />
-                    <MenuItem fx:id="undoMenuitem" mnemonicParsing="false" text="Undo" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="View">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Change Genome Names" />
-                     </items>
                 </Menu>
               </menus>
             </MenuBar>
@@ -109,7 +95,7 @@
                         <RadioMenuItem fx:id="nOfJumpsRadioItem" mnemonicParsing="false" text="Number of Jumps" toggleGroup="$OptimizerToggleGroup" />
                         <RadioMenuItem fx:id="nOfBlocksRadioItem" mnemonicParsing="false" text="Number of Blocks skipped" toggleGroup="$OptimizerToggleGroup" />
                         <RadioMenuItem fx:id="jumpLengthRadioItem" mnemonicParsing="false" text="Total Jump Length" toggleGroup="$OptimizerToggleGroup" />
-                        <RadioMenuItem fx:id="manualItem" disable="true" mnemonicParsing="false" text="Manual" toggleGroup="$OptimizerToggleGroup" />
+                        <RadioMenuItem fx:id="manualItem" mnemonicParsing="false" text="Manual" toggleGroup="$OptimizerToggleGroup" />
                     </items>
                   </MenuButton>
                </items>

@@ -5,7 +5,11 @@ package com.genomeRing.model.structure;
 
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
@@ -19,7 +23,7 @@ public class Block implements Serializable {
 	protected int start=-1; // start position of the block in the SuperGenome's coordinate system
 	protected int offset=-1; // offset of the block in the SuperGenome
 	protected int index=-1; // the index of this block in SuperGenome.blocks
-	protected SimpleStringProperty name = new SimpleStringProperty();
+	protected transient SimpleStringProperty name = new SimpleStringProperty();
 	protected String initalName;
 	
 	protected int sortingIndex = -1;
@@ -90,8 +94,9 @@ public class Block implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(length, start, offset, index, name, sortingIndex);
+		return Objects.hash(length, start, offset, index, name.get(), sortingIndex);
 	}
+
 
 	public String getName() {
 		return name.get();

@@ -28,20 +28,10 @@ public class GenomeRingWindowController {
     @FXML
     private MenuItem exportMenuItem;
 
-    @FXML
-    private MenuItem exportVisibleMenuItem;
 
     @FXML
     private MenuItem exitMenuItem;
 
-    @FXML
-    private MenuItem optimizeMenuItem;
-
-    @FXML
-    private MenuItem redoMenuItem;
-
-    @FXML
-    private MenuItem undoMenuitem;
 
     @FXML
     private CheckBox showPathsCheckBox;
@@ -115,11 +105,7 @@ public class GenomeRingWindowController {
         assert loadMenuItem != null : "fx:id=\"loadMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert saveMenuItem != null : "fx:id=\"saveMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert exportMenuItem != null : "fx:id=\"exportMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
-        assert exportVisibleMenuItem != null : "fx:id=\"exportVisibleMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert exitMenuItem != null : "fx:id=\"exitMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
-        assert optimizeMenuItem != null : "fx:id=\"optimizeMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
-        assert redoMenuItem != null : "fx:id=\"redoMenuItem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
-        assert undoMenuitem != null : "fx:id=\"undoMenuitem\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert showPathsCheckBox != null : "fx:id=\"showPathsCheckBox\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert showSegmentsCheckbox != null : "fx:id=\"showSegmentsCheckbox\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
         assert showRingDimensionsCheckBox != null : "fx:id=\"showRingDimensionsCheckBox\" was not injected: check your FXML file 'GenomeRingWindow.fxml'.";
@@ -169,25 +155,11 @@ public class GenomeRingWindowController {
         return exportMenuItem;
     }
 
-    public MenuItem getExportVisibleMenuItem() {
-        return exportVisibleMenuItem;
-    }
 
     public MenuItem getExitMenuItem() {
         return exitMenuItem;
     }
 
-    public MenuItem getOptimizeMenuItem() {
-        return optimizeMenuItem;
-    }
-
-    public MenuItem getRedoMenuItem() {
-        return redoMenuItem;
-    }
-
-    public MenuItem getUndoMenuitem() {
-        return undoMenuitem;
-    }
 
     public CheckBox getShowPathsCheckBox() {
         return showPathsCheckBox;

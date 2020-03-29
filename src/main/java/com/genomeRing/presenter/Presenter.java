@@ -1,12 +1,15 @@
 package com.genomeRing.presenter;
 
+import com.genomeRing.view.exportViewWindow.ExportViewWindow;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,7 +22,10 @@ import com.genomeRing.presenter.optimize.SuperGenomeOptimizer;
 import com.genomeRing.view.dialogWindow.DialogWindow;
 import com.genomeRing.view.genomeRingWindow.GenomeRingWindow;
 
-import java.io.File;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Presenter {
@@ -27,12 +33,12 @@ public class Presenter {
     private Stage stage;
     private SuperGenome superGenome;
     private RingDimensions ringDimensions;
-    private ObservableList<Block> blocks = FXCollections.emptyObservableList();
+    private ObservableList<Block> blocks = FXCollections.observableArrayList(new ArrayList<>());
 
     //we need this for the Drag and Drop feature of the ListView
     private DataFormat blockFormat = new DataFormat("Block");
 
-    public Presenter(GenomeRingWindow window, Stage stage) {
+    public Presenter(GenomeRingWindow window, Stage stage) throws Exception {
         this.window = window;
         this.stage = stage;
 
@@ -41,10 +47,11 @@ public class Presenter {
         loadFile();
         saveFile();
         setupRingInfoBox();
+        setupExportWindow();
 
-    }
-    public GenomeRingWindow getWindow() {
-        return window;
+        window.getController().getExitMenuItem().setOnAction((e)->{
+            stage.hide();
+        });
     }
 
 
@@ -137,7 +144,8 @@ public class Presenter {
     }
 
     /**
-     * Sets up the Sort by: Button of the ListView
+     * Sets up the Sort by: Button of the ListView. First sorts the List of Blocks using the Optimizer
+     * and then redrawing the View.
      */
     private void setupOptimizer(){
         //TODO maybe do all that in the constructor of the Service
@@ -217,7 +225,8 @@ public class Presenter {
     }
 
     /**
-     * Makes the Cells of the ListView Drag & Droppable
+     * Makes the Cells of the ListView Drag & Droppable.
+     * Source: https://gist.github.com/jewelsea/7821196
      */
     private class BlockCell extends ListCell<Block> {
 
@@ -228,6 +237,8 @@ public class Presenter {
 
 
             setOnDragDetected((event -> {
+
+                System.out.println("Detected");
                 window.getController().getOptimizerToggleGroup().selectToggle(window.getController().getManualItem());
 
                 if(getItem() == null){
@@ -243,8 +254,9 @@ public class Presenter {
                 dragboard.setContent(clipboardContent);
                 event.consume();
             }));
-            setOnDragOver(event -> {
 
+            setOnDragOver(event -> {
+                System.out.println("Drag OVer");
                 if(event.getGestureSource() != thisCell && event.getDragboard().hasContent(blockFormat)){
                     event.acceptTransferModes(TransferMode.MOVE);
                 }
@@ -252,6 +264,7 @@ public class Presenter {
             });
 
             setOnDragEntered(event -> {
+                System.out.println("Entered");
                 if (event.getGestureSource() != thisCell &&
                         event.getDragboard().hasContent(blockFormat)) {
                     setOpacity(0.3);
@@ -259,15 +272,16 @@ public class Presenter {
             });
 
             setOnDragExited(event -> {
-
+                System.out.println("Exited");
                 if (event.getGestureSource() != thisCell &&
                         event.getDragboard().hasContent(blockFormat)) {
                     setOpacity(1);
                 }
+                System.out.println(blocks);
             });
 
             setOnDragDropped(event -> {
-
+                System.out.println("Dropped");
                 if (getItem() == null) {
                     System.out.println("Drop empty");
                     return;
@@ -277,27 +291,36 @@ public class Presenter {
                 boolean success = false;
 
                 if (db.hasContent(blockFormat)) {
-                    ObservableList<Block> items = window.getController().getBlockListView().getItems();
+
+                   // ObservableList<Block> items = blocks;
                     Block draggedBlock = (Block) db.getContent(blockFormat);
 
-                    int draggedIdx = items.indexOf(draggedBlock);
-                    int thisIdx = items.indexOf(getItem());
-                 //   System.out.println("DraggedID:" +draggedIdx + "this" + thisIdx);
+                    ObservableList<Block> items = window.getController().getBlockListView().getItems();
+                    int fromID = items.indexOf(draggedBlock);
+                    int toID = items.indexOf(getItem());
 
-                    Block tempBlock = superGenome.getBlocks().get(draggedIdx);
-                    superGenome.getBlocks().set(draggedIdx,superGenome.getBlocks().get(thisIdx));
-                    superGenome.getBlocks().set(thisIdx,tempBlock);
+                    Block tempBlock = blocks.get(fromID);
+                    blocks.set(fromID,getItem());
+                    blocks.set(toID,tempBlock);
+
 //
-//                    items.set(draggedIdx, getItem());
-//                    items.set(thisIdx, draggedBlock);
+                   if(!blocks.equals(superGenome.getBlocks())){
+                        superGenome.getBlocks().setAll(blocks);
+                       window.setupView(superGenome,ringDimensions);
+                    }
+
+
+ //                items.set(fromID, getItem());
+  //               items.set(toID, draggedBlock);
 //
-//                    List<Block> itemscopy = new ArrayList<>(view.getController().getBlockListView().getItems());
-//                    getListView().getItems().setAll(itemscopy);
+   //                List<Block> itemscopy = new ArrayList<>(window.getController().getBlockListView().getItems());
+    //                System.out.println(itemscopy);
+    //               getListView().getItems().setAll(itemscopy);
 
                     success = true;
                 }
                 event.setDropCompleted(success);
-                event.consume();
+                 event.consume();
             });
 
             setOnDragDone(DragEvent::consume);
@@ -410,6 +433,80 @@ public class Presenter {
     }
 
     /**
+     * Exports a screenshot of the view elements in an image file.
+     */
+    private void setupExportWindow(){
+        getWindow().getController().getExportMenuItem().setOnAction((e)->{
+            ExportViewWindow exportViewWindow = null;
+            Image img = window.getViewAndLegendGroup().snapshot(new SnapshotParameters(),null);
+
+            try {
+                exportViewWindow = new ExportViewWindow();
+                //exportViewWindow.getController().getImageView().setPreserveRatio(true);
+               // exportViewWindow.getController().getImageView().setFitWidth(exportViewWindow.getController().getExportStackPane().getWidth());
+               // exportViewWindow.getController().getImageView().setFitHeight(exportViewWindow.getController().getExportStackPane().getHeight());
+                exportViewWindow.getController().getImageView().fitHeightProperty().bind(exportViewWindow.getController().getExportBorderPane().heightProperty());
+                exportViewWindow.getController().getImageView().fitWidthProperty().bind(exportViewWindow.getController().getExportBorderPane().widthProperty());
+
+
+                exportViewWindow.getController().getImageView().setImage(img);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            Stage exportStage = new Stage();
+            exportStage.setScene(new Scene(exportViewWindow.getRoot(),600,400));
+
+
+            exportViewWindow.getController().getExportCancelButton().setOnAction((e1)->{
+                exportStage.hide();
+            });
+
+            exportViewWindow.getController().getExportSaveButton().setOnAction((e2)->{
+                FileChooser fileChooser = new FileChooser();
+
+                File initFile = new File(".");
+                fileChooser.setInitialDirectory(initFile);
+
+                FileChooser.ExtensionFilter blocksFilter = new FileChooser.ExtensionFilter("Image", "*.png", ".jpeg", "*.PNG","*.JPEG");
+                fileChooser.getExtensionFilters().add(blocksFilter);
+
+                File file = fileChooser.showSaveDialog(stage);
+
+                    //to avoid any dependencies with Swing, i used the code given here: https://stackoverflow.com/questions/27054672/writing-javafx-scene-image-image-to-file
+                    if(file != null){
+                        int width = (int) img.getWidth();
+                        int height = (int) img.getHeight();
+                        PixelReader reader = img.getPixelReader();
+                        byte[] buffer = new byte[width * height * 4];
+                        WritablePixelFormat<ByteBuffer> format = PixelFormat.getByteBgraInstance();
+                        reader.getPixels(0, 0, width, height, format, buffer, 0, width * 4);
+                        try {
+                            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+                            for(int count = 0; count < buffer.length; count += 4) {
+                                out.write(buffer[count + 2]);
+                                out.write(buffer[count + 1]);
+                                out.write(buffer[count]);
+                                out.write(buffer[count + 3]);
+                            }
+                            out.flush();
+                            out.close();
+                        } catch(IOException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+                    img.cancel();
+                    exportStage.hide();
+
+            });
+
+            exportStage.show();
+
+        });
+    }
+
+    /**
      * creates an example SuperGenome without a file.
      * @return example SuperGenome
      */
@@ -442,78 +539,6 @@ public class Presenter {
         superGenome.addGenome(g3);
 
 
-    //Outerjump examples
-//        Block blockA = new Block(superGenome, "A", 100);
-//        Block blockB = new Block(superGenome, "B", 150);
-//        Block blockC = new Block(superGenome, "C", 200);
-//        Block blockD = new Block(superGenome, "D", 80);
-//        Block blockE = new Block(superGenome, "E", 200);
-//        Block blockF = new Block(superGenome, "F", 80);
-//        Block blockG = new Block(superGenome, "G", 200);
-//        Block blockH = new Block(superGenome, "H", 80);
-//
-//        superGenome.addBlock( blockA );
-//        superGenome.addBlock( blockB );
-//        superGenome.addBlock( blockC );
-//        superGenome.addBlock( blockD );
-//        superGenome.addBlock(blockE);
-//        superGenome.addBlock(blockF);
-//        superGenome.addBlock(blockG);
-//        superGenome.addBlock(blockH);
-//
-//        Genome g1 = new Genome(superGenome, false, "Red");
-//        g1.addCoveredBlock(new CoveredBlock(blockH, false));
-//        g1.addCoveredBlock(new CoveredBlock(blockD, true));
-//        g1.addCoveredBlock(new CoveredBlock(blockB, true));
-//
-//        Genome g2 = new Genome(superGenome, false, "Blue");
-//        g2.addCoveredBlock(new CoveredBlock(blockB, true));
-//        g2.addCoveredBlock(new CoveredBlock(blockD, true));
-//        g2.addCoveredBlock(new CoveredBlock(blockE, true));
-//        Genome g3 = new Genome(superGenome, false, "Green");
-//        g3.addCoveredBlock(new CoveredBlock(blockA, false));
-//        g3.addCoveredBlock(new CoveredBlock(blockC, true));
-//        g3.addCoveredBlock(new CoveredBlock(blockH,true));
-//        superGenome.addGenome(g1);
-//       superGenome.addGenome(g2);
-//        superGenome.addGenome(g3);
-
- //interchange examples
- /*      Block blockA = new Block(superGenome, "A", 100);
-        Block blockB = new Block(superGenome, "B", 150);
-        Block blockC = new Block(superGenome, "C", 200);
-        Block blockD = new Block(superGenome, "D", 80);
-        Block blockE = new Block(superGenome, "E", 200);
-        Block blockF = new Block(superGenome, "F", 80);
-        Block blockG = new Block(superGenome, "G", 200);
-        Block blockH = new Block(superGenome, "H", 80);
-
-        superGenome.addBlock( blockA );
-        superGenome.addBlock( blockB );
-        superGenome.addBlock( blockC );
-        superGenome.addBlock( blockD );
-        superGenome.addBlock(blockE);
-        superGenome.addBlock(blockF);
-        superGenome.addBlock(blockG);
-        superGenome.addBlock(blockH);
-
-        Genome g1 = new Genome(superGenome, false, "Red");
-        g1.addCoveredBlock(new CoveredBlock(blockH, false));
-        g1.addCoveredBlock(new CoveredBlock(blockD, true));
-        g1.addCoveredBlock(new CoveredBlock(blockB, false));
-
-        Genome g2 = new Genome(superGenome, false, "Blue");
-        g2.addCoveredBlock(new CoveredBlock(blockB, true));
-        g2.addCoveredBlock(new CoveredBlock(blockA, false));
-        g2.addCoveredBlock(new CoveredBlock(blockC, false));
-        Genome g3 = new Genome(superGenome, false, "Green");
-        g3.addCoveredBlock(new CoveredBlock(blockA, false));
-        g3.addCoveredBlock(new CoveredBlock(blockC, false));
-        g3.addCoveredBlock(new CoveredBlock(blockH,true));
-        superGenome.addGenome(g1);
-        superGenome.addGenome(g2);
-        superGenome.addGenome(g3);*/
-
         return superGenome;
     }
 
@@ -527,32 +552,38 @@ public class Presenter {
         setupOptimizer();
         ringDimensions = new RingDimensions(20, radius, 1, 5, superGenome);
         window.setupView(superGenome,ringDimensions);
+
     }
 
     /**
      * Sets up the Ring Information Labels easily with Bindings and Listeners.
      * Currently uses decimal commas.
      */
-    private void setupRingInfoBox(){
+    private void setupRingInfoBox() {
 
         window.getController().getRingInfoVBOX().visibleProperty().bind(window.getController().getShowRingDimensionsCheckBox().selectedProperty());
 
-        window.getController().getGenomeWidthLabel().textProperty().bind(Bindings.format("%.2f",ringDimensions.genomeWidthProperty()));
+        window.getController().getGenomeWidthLabel().textProperty().bind(Bindings.format("%.2f", ringDimensions.genomeWidthProperty()));
 
-        window.getController().getBlockGapLabel().textProperty().bind(Bindings.format("%.2f",ringDimensions.blockGapProperty()));
+        window.getController().getBlockGapLabel().textProperty().bind(Bindings.format("%.2f", ringDimensions.blockGapProperty()));
 
-        window.getController().getCircleSpacingLabel().textProperty().bind(Bindings.format("%.2f",ringDimensions.ringDistanceProperty()));
+        window.getController().getCircleSpacingLabel().textProperty().bind(Bindings.format("%.2f", ringDimensions.ringDistanceProperty()));
 
         window.getController().getRotationLabel().setText(Double.toString(window.getGenomeRingView().getRotate()));
 
         window.getGenomeRingView().rotateProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                double rotation =(double) t1;
+                double rotation = (double) t1;
                 window.getController().getRotationLabel().setText(Double.toString((rotation % 360)));
             }
         });
 
     }
+
+    public GenomeRingWindow getWindow() {
+        return window;
+    }
+
 
 }

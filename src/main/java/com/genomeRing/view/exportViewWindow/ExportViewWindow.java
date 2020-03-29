@@ -1,20 +1,22 @@
-package com.genomeRing.view.dialogWindow;
+package com.genomeRing.view.exportViewWindow;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.BorderPane;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-//TODO align the elements correctly
-public class DialogWindow  {
+public class ExportViewWindow extends BorderPane {
 
-    private DialogWindowController controller;
     private Parent root;
+    private ExportViewWindowController controller;
 
-    public DialogWindow() throws Exception {
+    public ExportViewWindow() throws Exception {
+
         final FXMLLoader fxmlLoader = new FXMLLoader();
-        final URL url = getClass().getResource("DialogWindow.fxml");
+        final URL url = getClass().getResource("ExportViewWindow.fxml");
 
         if (url == null)
             throw new Exception("URL not found");
@@ -27,11 +29,16 @@ public class DialogWindow  {
 
     }
 
-    public DialogWindowController getController() {
-        return controller;
-    }
+
+
+
+
 
     public Parent getRoot() {
         return root;
+    }
+
+    public ExportViewWindowController getController() {
+        return controller;
     }
 }
