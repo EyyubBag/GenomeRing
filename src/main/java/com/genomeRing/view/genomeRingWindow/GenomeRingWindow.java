@@ -26,6 +26,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+
+/**
+ *   Wraps the Window created by the  "GenomeRingViewWindow.fxml". Links it with the controller.
+ *   Sets up all the camera controls is the root for all the elements of the view.
+ */
 public class GenomeRingWindow extends BorderPane {
 
     private GenomeRingWindowController controller;
@@ -195,6 +200,12 @@ public class GenomeRingWindow extends BorderPane {
 //        });
     }
 
+    /**
+     * Used to determine the position of the scroller after panning the view.
+     * @param scrollContent
+     * @param scroller
+     * @return
+     */
     private Point2D figureScrollOffset(Node scrollContent, ScrollPane scroller) {
         double extraWidth = scrollContent.getLayoutBounds().getWidth() - scroller.getViewportBounds().getWidth();
         double hScrollProportion = (scroller.getHvalue() - scroller.getHmin()) / (scroller.getHmax() - scroller.getHmin());
@@ -239,7 +250,6 @@ public class GenomeRingWindow extends BorderPane {
         controller.getRestoreOrderMenuItem().setSelected(true);
 
         controller.getShowPathsCheckBox().setSelected(true);
-       // controller.getShowRingDimensionsCheckBox().setSelected(false);
         controller.getShowLegendCheck().setSelected(true);
 
     }

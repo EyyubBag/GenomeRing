@@ -9,6 +9,9 @@ import com.genomeRing.view.genomeRingWindow.GenomeRingWindow;
 
 import java.util.List;
 
+/**
+ * Draws the lanes for the genomes on top of the SuperGenome Blocks.
+ */
 public class GenomeSegmentView extends PathView {
 
     public GenomeSegmentView(Genome genome, RingDimensions ringDimensions, GenomeRingWindow window) {

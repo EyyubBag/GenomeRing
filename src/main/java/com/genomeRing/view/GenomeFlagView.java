@@ -10,12 +10,12 @@ import com.genomeRing.model.structure.Genome;
 import com.genomeRing.model.structure.RingDimensions;
 
 @SuppressWarnings("serial")
-public class GenomeFlags2 extends PathView {
+public class GenomeFlagView extends PathView {
 
 	private Path startMarker = new Path();
 	private Path endMarker = new Path();
 
-	public GenomeFlags2(Genome g, RingDimensions ringdim) {
+	public GenomeFlagView(Genome g, RingDimensions ringdim) {
 
 		this.getChildren().addAll(startMarker, endMarker);
 		this.setShapeStyle(startMarker);

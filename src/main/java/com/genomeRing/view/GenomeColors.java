@@ -3,6 +3,9 @@ package com.genomeRing.view;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Collection of the available colors for the genomes.
+ */
 public class GenomeColors{
 
 	protected Color[] colors;

@@ -16,9 +16,9 @@ import java.util.Optional;
 
 
 /**
- * contains every Group
+ * Group that contains every element of the GenomeRing.
  */
-public class GenomeRingView extends Group implements SuperGenomeListener {
+public class GenomeRingView extends Group{
     private SuperGenome superGenome;
     private RingDimensions ringDimensions;
     //Adding the Window so we can use Bindings
@@ -34,9 +34,6 @@ public class GenomeRingView extends Group implements SuperGenomeListener {
         this.superGenome = superGenome;
         this.ringDimensions = ringDimensions;
         this.window = window;
-
-        //setup SuperGenome TODO remove this
-        superGenome.addListener(this);
 
         //setting up the boundaries for the Legend
         double prefHeight = window.getController().getLegendVBox().getPrefHeight();
@@ -132,6 +129,10 @@ public class GenomeRingView extends Group implements SuperGenomeListener {
         }));
     }
 
+    /**
+     * Sets up the ContextMenu for the Legend, so that you can access the menu for changing color, name and disabling the genome.
+     * @param g Genome
+     */
     private void createChangeNameDialog(Genome g){
         Dialog<String> dialog = new Dialog<>();
 
@@ -166,12 +167,5 @@ public class GenomeRingView extends Group implements SuperGenomeListener {
         });
     }
 
-    @Override
-    public void superGenomeChanged(SuperGenomeEvent evt) {
-       // this.getChildren().clear();
-       // drawSuperGenome();
-        // drawGenomes();
-
-    }
 
 }

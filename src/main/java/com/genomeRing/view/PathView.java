@@ -8,7 +8,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 
-//TODO change Name and clean up
+/**
+ * Class with functionality that can be used by multiple other classes.
+ */
 public class PathView extends Group {
 
     private SimpleObjectProperty<Color> color = new SimpleObjectProperty<>();
@@ -36,11 +38,6 @@ public class PathView extends Group {
         shape.setStrokeLineCap(this.strokeLineCap);
         shape.setStrokeLineJoin(this.strokeLineJoin);
         shape.strokeWidthProperty().bind(width);
-    }
-
-
-    public void addSegment(double radius, double alpha_start, double alpha_end, boolean connect) {
-
     }
 
 

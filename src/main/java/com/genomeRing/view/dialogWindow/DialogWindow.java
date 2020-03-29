@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.net.URL;
 
 //TODO align the elements correctly
+
+/**
+ * Wraps the Window created by the  "DialogWindow.fxml". Links it with the controller.
+ */
 public class DialogWindow  {
 
     private DialogWindowController controller;

@@ -2,13 +2,13 @@ package com.genomeRing.view.exportViewWindow;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.BorderPane;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class ExportViewWindow extends BorderPane {
+/**
+ * Wraps the Window created by the  "ExportViewWindow.fxml". Links it with the controller.
+ */
+public class ExportViewWindow{
 
     private Parent root;
     private ExportViewWindowController controller;

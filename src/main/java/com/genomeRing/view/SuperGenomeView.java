@@ -13,7 +13,7 @@ import com.genomeRing.model.structure.SuperGenome;
 import com.genomeRing.view.genomeRingWindow.GenomeRingWindow;
 
 /**
- * Contains the SuperGenome and the blocklabels.
+ * Contains the SuperGenome and the Blocklabels.
  */
 
 public class SuperGenomeView extends PathView {

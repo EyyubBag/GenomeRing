@@ -12,15 +12,14 @@ import com.genomeRing.view.genomeRingWindow.GenomeRingWindow;
 
 
 /**
- * contains the Groups for GenomeSegments and GenomePaths and kind of replaces render.GenomeShape
- * //TODO make genomeColor a Property
+ * Contains the Groups for visualizing each Genome.
  * //TODO make a Tooltip appear if this Group is hovered
+ * could implement the GenomeListener
  */
-public class GenomeView extends Group implements GenomeListener {
+public class GenomeView extends Group {
 
 
     public GenomeView(Genome genome, RingDimensions ringDimensions, GenomeRingWindow window) {
-        genome.addListener(this);
 
         Color genomeColor = genome.getColor();
 
@@ -35,17 +34,10 @@ public class GenomeView extends Group implements GenomeListener {
         genomePathView.setStrokeWidth(ringDimensions.getGenomeWidth());
 
         //Draw Flag after the paths so we can have the Directions
-        GenomeFlags2 genomeFlagsView = new GenomeFlags2(genome, ringDimensions);
+        GenomeFlagView genomeFlagsView = new GenomeFlagView(genome, ringDimensions);
        genomeFlagsView.setStyle(genomeColor, StrokeLineCap.BUTT, StrokeLineJoin.ROUND,ringDimensions.getGenomeWidth()/4);
 
         this.getChildren().addAll(genomePathView, genomeSegmentView,genomeFlagsView);
-
-    }
-
-
-    //TODO prob. not needed anymore
-    @Override
-    public void genomeChanged(GenomeEvent evt) {
 
     }
 }

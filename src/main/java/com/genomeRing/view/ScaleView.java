@@ -8,6 +8,7 @@ import com.genomeRing.model.structure.RingDimensions;
 import com.genomeRing.model.structure.SuperGenome;
 
 /**
+ * Determines and draws the scale.
  * This class is written really weird.
  * We use a Path Object to draw the vertical lines of the scale and a single arc to draw
  * the horizontal arc connecting all the vertical lines.
