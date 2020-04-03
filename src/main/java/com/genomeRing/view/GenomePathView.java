@@ -305,15 +305,16 @@ public class GenomePathView extends Path {
         //curveTo(bezier1X, bezier1Y, bezier2X, bezier2Y, targetX, targetY);
         this.getElements().add(new CubicCurveTo(bezier1X, bezier1Y, bezier2X, bezier2Y, targetX, targetY));
 
-        double startX = polarToX(radius_jumplevel, arc_starting_on_angle);
-        double startY = polarToY(radius_jumplevel, arc_starting_on_angle);
+       // double startX = polarToX(radius_jumplevel, arc_starting_on_angle);
+      //  double startY = polarToY(radius_jumplevel, arc_starting_on_angle);
 
         double endX = polarToX(radius_jumplevel, arc_ending_on_angle);
         double endY = polarToY(radius_jumplevel, arc_ending_on_angle);
 
         double length = Math.abs(arc_ending_on_angle - arc_starting_on_angle);
-        //System.out.println(turn + " " + length + " "+ b.isForward()  +" " + nextb.isForward()+ "" + radius_interchange + " " + direction);
-        System.out.println(turn + " " + length + " "+ lastDirection + " " + direction);
+        //System.out.println(turn + " " + length + " "+ lastDirection + " " + direction);
+
+        //different directions or "turns" need different parameters for the ArcTo() Constructor
         if(lastDirection == direction && lastDirection == -1)
             if (turn == 1) {
                 ArcTo arcTo = new ArcTo(radius_jumplevel, radius_jumplevel, length, endX, endY, false, true);
@@ -337,14 +338,12 @@ public class GenomePathView extends Path {
                 ArcTo arcTo = new ArcTo(radius_jumplevel, radius_jumplevel, length, endX, endY, false, true);
                 this.getElements().add(arcTo);
             } else {
-                //correct
                 ArcTo arcTo = new ArcTo(radius_jumplevel, radius_jumplevel, length, endX, endY, false, false);
                 this.getElements().add(arcTo);
             }
 
         }else if(lastDirection == -1 && direction == 1){
             if (turn == 1) {
-                //correct
                 ArcTo arcTo = new ArcTo(radius_jumplevel, radius_jumplevel, length, endX, endY, false, true);
                 this.getElements().add(arcTo);
             } else {
@@ -421,6 +420,8 @@ public class GenomePathView extends Path {
 
         double length = Math.abs(alpha_end - alpha_start);
 		//System.out.println(turn + " " + length + " "+ b.isForward()  +" " + nextb.isForward()+ "" + radius_interchange + " " + direction);
+
+        //different directions or "turns" need different parameters for the ArcTo() Constructor
 		if(direction == -1)
 			if (turn == -1) {
 				this.getElements().add(new LineTo(endX, endY));
@@ -450,7 +451,6 @@ public class GenomePathView extends Path {
      * Adding a standard arc. We have to consider direction and strand.
      * If it should not be connected we just move to the starting point of the arc.
      *
-     * @param radiusadd
      * @param alpha_start
      * @param alpha_end
      * @param connect
@@ -467,6 +467,7 @@ public class GenomePathView extends Path {
 
        // System.out.println(length);
 
+        //different directions or "turns" need different parameters for the ArcTo() Constructor
         if (direction == -1) {
             if (!connect) {
                 this.getElements().add(new MoveTo(endX, endY));

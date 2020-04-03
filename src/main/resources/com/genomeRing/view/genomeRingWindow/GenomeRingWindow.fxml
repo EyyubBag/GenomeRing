@@ -29,7 +29,7 @@
                     <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" text="Load" />
                         <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" text="Save" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" text="Export " />
+                        <MenuItem fx:id="exportMenuItem" disable="true" mnemonicParsing="false" text="Export " />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit " />
                   </items>
