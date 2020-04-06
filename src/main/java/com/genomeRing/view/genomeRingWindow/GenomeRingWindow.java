@@ -49,14 +49,15 @@ public class GenomeRingWindow extends BorderPane {
 
     public GenomeRingWindow(Stage stage) throws Exception {
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = this.getClass().getResource("GenomeRingWindow.fxml");
-
-       if (url == null)
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/genomeRing/view/genomeRingWindow/GenomeRingWindow.fxml"));
+       // URL url = this.getClass().getResource("/com/genomeRing/view/genomeRingWindow/GenomeRingWindow.fxml");
+      //  System.out.println(url.toString());
+      /* if (url == null)
             throw new Exception("URL not found");
         try  (InputStream ins = url.openStream()) {
             fxmlLoader.load(ins);
-        }
+        }*/
+      fxmlLoader.load();
 
         this.root = fxmlLoader.getRoot();
         this.controller = fxmlLoader.getController();
