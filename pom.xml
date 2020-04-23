@@ -28,7 +28,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -44,24 +45,37 @@
                     <jlinkVerbose>true</jlinkVerbose>
                     <jlinkImageName>genomeRing</jlinkImageName>
                     <jlinkZipName>genomeRingZip</jlinkZipName>
-                    <mainClass>com.genomeRing.GenomeRing</mainClass>
+                    <mainClass>com.genomeRing.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+
+                    <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.genomeRing.GenomeRing</mainClass>
+                            <!-- Specify the main class of your project here -->
+                            <mainClass>com.genomeRing.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
 
         </plugins>
     </build>
